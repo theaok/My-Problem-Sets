@@ -13,7 +13,7 @@ use https://https://sites.google.com/a/scarletmail.rutgers.edu/jamesondatman/fil
 // will try importing from a website or google doc another time
 // will try uploading from unzipped file
 use "C:\Users\jhc157.RAD.000\Downloads\GSS2018.dta"
-
+//No! Must load from online!! 
 cd C:\Users\jhc157.RAD.000\Documents
 
 sum abpoor
@@ -21,7 +21,7 @@ sum abpoor, detail
 
 tab income
 l // produced a LOT of data, will maybe only do a subset of data, there are ~2k obs
-
+//No! Don't use paths! Class1: just one cd!
 clear
 use "C:\Users\jhc157.RAD.000\Downloads\GSS2018.dta"
 cd C:\Users\jhc157.RAD.000\Documents
@@ -31,11 +31,11 @@ sum class, detail
 d class
 d class, detail
 l
-
+//Again don't use paths!!
 save C:\Users\jhc157.RAD.000\Documents\GSS2018B.dta
 save C:\Users\jhc157.RAD.000\Documents\GSS2018B.txt
 save C:\Users\jhc157.RAD.000\Documents\GSS2018B.html
-
+//Wrong code!! Use outhseet or export, see documentation
 save C:\Users\jhc157.RAD.000\Documents\GSS2018B2.dta
 save C:\Users\jhc157.RAD.000\Documents\GSS2018C.txt
 save C:\Users\jhc157.RAD.000\Documents\GSS2018D.html
