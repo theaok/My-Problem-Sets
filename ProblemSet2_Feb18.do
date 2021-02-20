@@ -2,6 +2,7 @@
 // Dr. Adam Okulicz-Kozaryn
 // MERGING
 
+//could say a bit more about rationale, research questions, hypotheses etc
 /* For this problem set, I merged COVID data with NJ census data, in an effort to see how NJ looked when it came to COVID. 
 The merging was successful and allowed me to look at NJ county COVID data along with population numbers. Will be useful for my later PS, such as those including poverty numbers. 
 Also ran generating, encoding, recoding, replacing, collapsing, drop, bys, and egen */
@@ -18,6 +19,7 @@ insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/co-e
 keep if stname == "New Jersey"
 save NJcensus.dta 
 
+//see first 2 classes! don't use paths! thats why we cd in the first place!!!
 clear
 use C:\Users\jhc157\uscounties.dta
 replace county = "Atlantic County" if county == "Atlantic"
@@ -42,6 +44,8 @@ replace county = "Sussex County" if county == "Sussex"
 replace county = "Union County" if county == "Union"
 replace county = "Warren County" if county == "Warren"
 desc
+//you have to save before loading new data below, you lose your work!
+
 use NJcensus.dta, clear // master
 desc
 drop county
@@ -72,26 +76,28 @@ keep if state == "Delaware"
 save delcounties.dta
 tab county
 tab cases //47,349 cases most recently
-recode cases (0/47349 = 1), gen(newcase)
+recode cases (0/47349 = 1), gen(newcase) //why would you do this? what is thatuseful for??
 tab newcase
 
 //Recoding Again
 keep if state == "Delaware"
-recode cases (0/25000 = 1)(25000/47349 = 2), gen(casesrecoded)
+recode cases (0/25000 = 1)(25000/47349 = 2), gen(casesrecoded) //why would you do this? what is thatuseful for??
 tab casesrecoded
 
 //Collapse
 collapse (mean) cases deaths, by(state)
-list //provides the mean number of cases and deaths per state
+list //provides the mean number of cases and deaths per state //right, but any sustantive interpretation?
 
 //Bys and egen
 keep if state == "Maryland"
 bys date: egen avg_deaths=mean(deaths)
-sum avg_deaths
+sum avg_deaths //again interpret...
 l
 
 //Gen and Replace
 use C:\Users\jhc157\uscounties.dta
+
+the following is good
 gen northjersey =. 
 gen southjersey =.
 replace northjersey=1 if county == "Essex" | county == "Bergen" | county == "Hudson" | county == "Union" | county == "Warren" | county == "Middlesex" | county == "Sussex" | county == "Passaic" | county == "Morris" | county == "Somerset" | county == "Hunterdon" | county == "Mercer"
