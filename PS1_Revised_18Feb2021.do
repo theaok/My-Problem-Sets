@@ -6,6 +6,8 @@
 it up in excel before uploading to github and importing here. I played around
 with the data before creating a graph and scatter plot */
 
+//alays have to say version of stata you're using 
+
 clear
 cd C:\Users\jhc157
 insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/NJpoverty2019B.csv
@@ -20,6 +22,7 @@ graph hbar pop belowpov, over(county) /*not sure why it says "mean of"
 it seems the higher the population, the higher the population of those below the 
 poverty line*/
 
+//yeah but why would you do that:
 gen cty =.
 replace cty=1 if county == "Atlantic County, New Jersey" 
 replace cty=2 if county == "Bergen County, New Jersey" 
@@ -43,12 +46,15 @@ replace cty=19 if county == "Sussex County, New Jersey"
 replace cty=20 if county == "Union County, New Jersey" 
 replace cty=21 if county == "Warren County, New Jersey" 
 
+//if anything should shorten from county to cty by dropping 'County, New Jersey" and then use in mlab
 scatter belowpov pop, mlabel(cty) /*clearly there is a correlation between total 
 population with number of those below the poverty line will do this again with 
 poverty rates, as that may show something different */
 
 sum belowpov //provides min belowpov (5474) and max (122569)
 
+//they produce stata dataset, not text or xls on ,y version of stata, and again, i have no idea which version you have used
+//but anyway most likely it's wrong
 save NJpovertyB.txt //saving second as a .txt
 save NJpovertyB.xlsx //saving third as a .xlsx
 outsheet using NJpovertyB.html //saving fourth as a .html ??
