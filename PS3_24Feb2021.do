@@ -17,11 +17,28 @@ Future research should include population density numbers by county as
 well as information on health rankings by county.
 
 Reshape was difficult.
+again have data that is ripe for reshape such as panel data--county-year
+*/
+
+/*
+the main problem seems that most of the code is missing, and so our sacred replication principle is violated!
+ie you have gotten source data and then cleaned it and fixed it (and so it merges perfectly here) but the code for fixining and
+cleaning is totally missing!
+
+eg: https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/
+has data for all counties, but data you load has just 21 NJ counties!
+this is why i was saying that because everything merges perfectly for you, there is some big problem, and indeed, the big 
+problem is that you didnt save the code used to clean the data!
+
+and need precise links to exact datasets
+eg you say you got one dataset at https://www.state.nj.us/dep/srp/kcsnj/ but then need to pick active v others, and click through--
+if you cant provide exact url to actual dataset, have to describe in detail where did you got the data! so i can get exact same datset!
 */
 
 cd C:\Users\jhc157
 
 clear
+//give url to data here and everywhere!
 insheet using https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv //NYTimes COVID Data
 keep if state == "New Jersey"
 replace county = "Atlantic County" if county == "Atlantic"
@@ -45,21 +62,25 @@ replace county = "Somerset County" if county == "Somerset"
 replace county = "Sussex County" if county == "Sussex"
 replace county = "Union County" if county == "Union"
 replace county = "Warren County" if county == "Warren"
+
+//again consider first extracting date, maybe just yr and mo and collapsing on that too
 collapse cases deaths, by(county)
+
+//again this is mistake prone; can just drop if county=="Unknown"
 keep if county == "Atlantic County" | county == "Bergen County" | county == "Burlington County" | county == "Camden County" | county == "Cape May County" | county == "Cumberland County" | county == "Essex County" | county == "Gloucester County" | county == "Hudson County" | county == "Hunterdon County" | county == "Mercer County" | county == "Middlesex County" | county == "Monmouth County" | county == "Morris County" | county == "Ocean County" | county == "Passaic County" | county == "Salem County" | county == "Somerset County" | county == "Sussex County" | county == "Union County" | county == "Warren County"
 l
-save NJCovidCasesAndDeathsByCountyB.dta
-// data sourced the NYTimes Github
+save NJCovidCasesAndDeathsByCountyB.dta //always add option replace!
+// data sourced the NYTimes Github //url!
 
 clear
-insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/co-est2019-alldata_CLEANED_UP_2.csv //Census data
+insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/co-est2019-alldata_CLEANED_UP_2.csv //Census data //url!!
 keep if stname == "New Jersey"
 l
 save NJCensusPop2019B.dta
 // data sourced from US Census
 
 clear
-insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/NJpoverty2019B.csv
+insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/NJpoverty2019B.csv //same here
 save NJPoverty2019.dta
 // NJ poverty data. data sourced from US Census
 
@@ -89,6 +110,8 @@ drop med_hh_income_percent_of_state_t
 l
 save NJUnemployment2019.dta
 // data on unemployment. data sourced from https://www.ers.usda.gov/data-products/county-level-data-sets/download-data/ 
+
+//and because of earlier problems--missing all the code to clean the data, the following will need to be redone
 
 clear
 use C:\Users\jhc157\NJCovidCasesAndDeathsByCountyB.dta
