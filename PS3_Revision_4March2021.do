@@ -8,7 +8,10 @@ sites in NJ counties, and rates of
 uninsurance. My hypothesis would be that counties with greater poverty rates and signs
 of socioeconomic distress (unemployment and lack of health insurance)
 would see higher mean deaths/cases from COVID. After the merge, I am noticing some 
-correlation between poverty rates and pandemic deaths, however this can be attr-
+correlation //good--but have code for it!
+
+
+between poverty rates and pandemic deaths, however this can be attr-
 ibuted to population and population density. An example would be Bergen County,
 a wealthy suburb of New York with low poverty rate but high mean cases and 
 deaths from COVID. It is New Jersey's most populated county with nearly 1 million
@@ -17,7 +20,10 @@ populated counties. It has a low mean case and death rate.
 Future research should include population density numbers by county as
 well as information on health rankings by county.
 
+fine; but could do it now, the more data the merrier
+
 3 March and 4 March Revisions:
+nice, very helpful to keep a log like that
 
 For this revision, I most importantly imported data as I directly found it
 online, without cleaning it up beforehand in excel. I also downloaded some data 
@@ -62,13 +68,16 @@ replace county = "Warren County" if county == "Warren"
 save NJCovidCasesAndDeathsByCountyC.dta, replace /*without collapsing cases and deaths,
 to be used in a secondary merge using 1:m / m:1 */
 
-collapse cases deaths, by(county)
-l
+collapse cases deaths, by(county) //see help collapse; the deafult is mean, do you really want mean? does it make sense?
+// i'd imagine sum would make much more sense!
+l //good; good to have a look; 
 save NJCovidCasesAndDeathsByCountyB.dta, replace //with collapsing
 // data sourced from the NYTimes Github
 
 clear
 insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/co-est2019-alldata.csv //Census data
+//pls cite data properly! what census data? from which url? i need to be able o find exact same dataset online myself based on inf\
+o you provided 
 keep if stname == "New Jersey"
 keep ctyname* popestimate2019*
 rename ctyname county
@@ -76,7 +85,7 @@ l
 save NJCensusPop2019B.dta, replace
 // data sourced from US Census
 
-clear
+clear //likewise, what are these data?
 insheet using https://raw.githubusercontent.com/jamesonrutgers/Raw-data/main/ACSST5Y2019.S1701_data_with_overlays_2021-03-02T224230.csv
 drop v1
 rename v2 county
@@ -148,6 +157,7 @@ clear
 insheet using https://raw.githubusercontent.com/jamesonrutgers/DataMng/main/NJActiveContamSites2020.csv
 save NJContamSites.dta, replace 
 // Data on contaminated sites in NJ by county. data sourced from https://www.state.nj.us/dep/srp/kcsnj/ 
+//where? i went to that site, but cannot find it! again, i need to be able to find easily the data based on the info you provide
 
 clear
 insheet using https://raw.githubusercontent.com/jamesonrutgers/Raw-data/main/Unemployment-RAW.csv
@@ -188,14 +198,17 @@ clear
 use NJCensusPop2019B.dta, clear // master
 desc
 merge 1:1 county using NJCovidCasesAndDeathsByCountyB.dta //merge 1
+//some didnt merge! again, super important to investigate and make sure that stuff taht didnt merge wasnt supposed to, eg
+l if _merge !=3 //eg can say: we're good unknown and new jersey werent supposed to merge; and can drop them
+drop if _merge !=3
 drop _merge
-merge 1:1 county using NJPoverty2019.dta //merge 2
+merge 1:1 county using NJPoverty2019.dta //merge 2 //same here! need to investigate
 drop _merge
-merge 1:m county using NJUninsuredPercent.dta //merge 3
+merge 1:m county using NJUninsuredPercent.dta //merge 3 //why is this 1:m???
 drop _merge
-merge m:1 county using NJUnemployment2019 //merge 4
+merge m:1 county using NJUnemployment2019 //merge 4 //doesnt make sense either
 drop _merge
-merge m:1 county using NJContamSites.dta  //merge 5
+merge m:1 county using NJContamSites.dta  //merge 5 //ditto
 /* for some reason, the three final merges required them to be changed to 1:m/m:1, not sure why*/
 tab _merge
 tab county
@@ -209,6 +222,8 @@ replace belowpov = "" if belowpov == "S1701_C02_001E"
 replace percBelowpov = "" if percBelowpov == "S1701_C03_001E"
 l
 
+//but below you merge the same data again! the only difference is to add uncollapsed data
+//can do that just in one step to the above data
 /* Secondary merges: Merging with Covid Data sans collapse, so as to use 1:m / m:1. Somewhat
 redundant now since my primary merges now contain 1:m/m:1 merges, although
 I'm not sure that's the way it should be. */
@@ -240,6 +255,7 @@ replace percBelowpov = "" if percBelowpov == "S1701_C03_001E"
 l
 
 /* Reshape */ 
+//ok, but try to do it with your data
 
 clear
 insheet using https://raw.githubusercontent.com/jamesonrutgers/Raw-data/main/grunfeld.csv
